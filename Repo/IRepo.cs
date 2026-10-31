@@ -4,10 +4,11 @@ namespace Utilities.Repo
 {
     public interface IRepo
     {
-        List<Dictionary<string, dynamic>> GetCollection(EntityOps ops);
-        Dictionary<string, dynamic> Delete(EntityOps ops);
-        int Insert(EntityOps ops);
-        void Update(EntityOps ops);
-        Dictionary<string, dynamic> GetScalarValues(EntityOps ops);
+        Task<List<Dictionary<string, dynamic>>> GetCollection(EntityOps ops);
+        //Task<string> GetCollectionJson(EntityOps ops);
+        Task<Dictionary<string, dynamic>> Delete(EntityOps ops);
+        Task<int> Insert(EntityOps ops);
+        Task Update(EntityOps ops);
+        Task<Dictionary<string, dynamic>> GetScalarValues(EntityOps ops);
     }
 }

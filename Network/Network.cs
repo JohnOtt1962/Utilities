@@ -8,7 +8,7 @@ namespace Utilities.Network
     {
         private static readonly HttpClient Client = new HttpClient()
         {
-            Timeout = TimeSpan.FromMinutes(6)
+            Timeout = TimeSpan.FromMinutes(20)
         };
         
         private static readonly JsonSerializerOptions JsonOptions = new()
@@ -21,7 +21,17 @@ namespace Utilities.Network
             NetworkResult? result = null;
             Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
 
-            HttpResponseMessage response = await Client.SendAsync(GetRequestMessage(url, request));
+            HttpResponseMessage response = null;
+
+            try
+            {
+                response = await Client.SendAsync(GetRequestMessage(url, request));
+            }
+            catch (Exception ex)
+            {
+                //no action
+            }
+
             string responseString = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode && !string.IsNullOrEmpty(responseString))
             {

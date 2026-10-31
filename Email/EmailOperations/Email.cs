@@ -2,8 +2,9 @@
 using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
+using Utilities.Email.Models;
 
-namespace Utilities.Email
+namespace Utilities.Email.EmailOperations
 {
     public class Email(IOptions<EmailConfig> emailConfig) : IEmail
     {
@@ -12,28 +13,22 @@ namespace Utilities.Email
         public async Task<bool> SendMail(EmailModel emailModel)
         {
             bool isSuccess = false;
-            MimeMessage message = GetEmailMessage(emailModel);
 
-            using (var client = new SmtpClient())
+            using var client = new SmtpClient();
+
+            try
             {
-                try
-                {
-                    await client.ConnectAsync(_emailConfig.Host, _emailConfig.Port, SecureSocketOptions.StartTls);
-                    await client.AuthenticateAsync(_emailConfig.UserName, _emailConfig.AppPassword);
+                MimeMessage message = GetEmailMessage(emailModel);
 
-                    await client.SendAsync(message);
-                    isSuccess = true;
-                }
-                catch (Exception ex)
-                {
-                    //No action at this time
-                    //Console.WriteLine($"Error sending email: {ex.Message}");
-                }
-                finally
-                {
-                    // Cleanly disconnect from the server
-                    await client.DisconnectAsync(true);
-                }
+                await client.ConnectAsync(_emailConfig.Host, _emailConfig.Port, SecureSocketOptions.StartTls);
+                await client.AuthenticateAsync(_emailConfig.UserName, _emailConfig.AppPassword);
+
+                await client.SendAsync(message);
+                isSuccess = true;
+            }
+            finally
+            {
+                await client.DisconnectAsync(true);
             }
 
             return isSuccess;

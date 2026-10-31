@@ -12,7 +12,15 @@ namespace Utilities.Repo.Helpers
 
             while (sdr.Read())
             {
-                returnCollection.Add(Enumerable.Range(0, sdr.FieldCount).ToDictionary(sdr.GetName, sdr.GetValue));
+                var row = new Dictionary<string, dynamic>();
+
+                for (int i = 0; i < sdr.FieldCount; i++)
+                {
+                    row[sdr.GetName(i)] =
+                        sdr.IsDBNull(i) ? null : sdr.GetValue(i);
+                }
+
+                returnCollection.Add(row);
             }
 
             return returnCollection;

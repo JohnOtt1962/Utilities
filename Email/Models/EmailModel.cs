@@ -1,4 +1,4 @@
-﻿namespace Utilities.Email
+﻿namespace Utilities.Email.Models
 {
     public class EmailModel
     {

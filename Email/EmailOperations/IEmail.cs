@@ -1,4 +1,6 @@
-﻿namespace Utilities.Email
+﻿using Utilities.Email.Models;
+
+namespace Utilities.Email.EmailOperations
 {
     public interface IEmail
     {
