@@ -33,5 +33,10 @@
             long dirSize = Task.Run(() => dirInfo.EnumerateFiles("*", SearchOption.AllDirectories).Sum(file => file.Length)).Result;
             return dirSize;
         }
+
+        public void DeleteAllFiles(string path)
+        {
+            Array.ForEach(Directory.GetFiles(path), File.Delete);
+        }
     }
 }

@@ -9,7 +9,7 @@ namespace Utilities.FileSystem
         private readonly IFileStreamOps _fileStreamOps;
         private readonly IFileOps _fileOps;
 
-        public FileSystemManager(ILogger logger)
+        public FileSystemManager()
         {
             _directoryOps = new DirectoryOps();
             _fileOps = new FileOps();
@@ -88,6 +88,11 @@ namespace Utilities.FileSystem
         public long GetSizeOfParentDirectory(string path)
         {
             return _directoryOps.GetSizeOfParentDirectory(path);
+        }
+
+        public void DeleteAllFiles(string path)
+        {
+            _directoryOps.DeleteAllFiles(path);
         }
     }
 }

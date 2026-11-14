@@ -37,16 +37,24 @@ namespace Utilities.Email.EmailOperations
         private MimeMessage GetEmailMessage(EmailModel emailModel)
         {
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress(_emailConfig.SenderName, _emailConfig.SenderEmail));
-            message.To.Add(new MailboxAddress(emailModel.Args.To, emailModel.Args.To));
-            message.Subject = emailModel.Args.Subject;
 
-            var bodyBuilder = new BodyBuilder
+            try
             {
-                HtmlBody = emailModel.Args.Body,
-                TextBody = emailModel.Args.Body
-            };
-            message.Body = bodyBuilder.ToMessageBody();
+                message.From.Add(new MailboxAddress(_emailConfig.SenderName, _emailConfig.SenderEmail));
+                message.To.Add(new MailboxAddress(emailModel.Args.To, emailModel.Args.To));
+                message.Subject = emailModel.Args.Subject;
+
+                var bodyBuilder = new BodyBuilder
+                {
+                    HtmlBody = emailModel.Args.Body,
+                    TextBody = emailModel.Args.Body
+                };
+                message.Body = bodyBuilder.ToMessageBody();
+            }
+            catch (Exception Ex)
+            {
+                throw;
+            }
 
             return message;
         }

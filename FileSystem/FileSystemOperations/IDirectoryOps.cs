@@ -8,5 +8,6 @@
         void CreateDirectory(string path);
         int GetFileCount(string path);
         long GetSizeOfParentDirectory(string path);
+        void DeleteAllFiles(string path);
     }
 }
