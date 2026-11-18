@@ -19,14 +19,14 @@ namespace Utilities.Logger
             Fatal
         }
 
-        public async Task WriteToLog(string message, Exception ex, LogLevel level, string className, ConnectionDetails conDetails)
+        public async Task WriteToLog(string message, Exception ex, LogLevel level, string className, ConnectionDetails conDetails, string serviceId)
         {
             await using SqlConnection con = new SqlConnection(conDetails.ConnectionString);
             await using SqlCommand cmd = new SqlCommand();
             try
             {
                 cmd.Connection = con;
-                cmd.Parameters.AddRange(GetParameters(level, className, message, ex));
+                cmd.Parameters.AddRange(GetParameters(level, className, message, ex, serviceId));
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = conDetails.ProcedureName;
 
@@ -39,7 +39,7 @@ namespace Utilities.Logger
             }
         }
 
-        private SqlParameter[] GetParameters(LogLevel logLevel, string className, string message, Exception ex)
+        private SqlParameter[] GetParameters(LogLevel logLevel, string className, string message, Exception ex, string serviceId)
         {
             return new[]
             {
@@ -67,6 +67,11 @@ namespace Utilities.Logger
                 {
                     ParameterName = "InnerException",
                     Value = GetInnerException(ex)
+                },
+                new SqlParameter
+                {
+                    ParameterName = "ServiceId",
+                    Value = serviceId
                 }
             };
         }
